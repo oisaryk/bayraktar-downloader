@@ -1,0 +1,26 @@
+{
+  "name": "bayraktar",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oisaryk/bayraktar-downloader.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oisaryk/bayraktar-downloader/issues"
+  },
+  "homepage": "https://github.com/oisaryk/bayraktar-downloader#readme",
+  "dependencies": {
+    "cli-progress": "^3.11.0",
+    "nodejs-web-scraper": "^6.1.0",
+    "table-scraper": "^1.0.3",
+    "youtube-mp3-downloader": "^0.7.10",
+    "youtube-search-without-api-key": "^1.0.7"
+  }
+}
