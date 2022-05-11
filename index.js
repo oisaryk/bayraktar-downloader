@@ -2,22 +2,8 @@
 const parser = require('./modules/parser');
 const ytFinder = require('./modules/youtube-finder');
 
-const MAIN_QUESTION = `
-    Do you want to download all recent bayractar songs?
-    1 - YES, whatever - NO.
-    
-`;
-
 (async () => {
-    const readline = require('./utils/readline.js');
-
     try {
-        const answer = await readline.askQuestion(MAIN_QUESTION);
-        if (answer.toString() !== '1') {
-            console.log('Ok byeeee.....');
-            process.exit();
-        }
-
         // Start parsing
         console.log('Parsing the table...');
         // Parse radio list table and save is as a list
