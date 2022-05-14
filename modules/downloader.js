@@ -7,6 +7,7 @@ let songsList = [];
 fs.readdir(directoryPath, function (err, files) {
     songsList = files;
 });
+const exceptions = require('../exeptions.json');
 // This is bad! Figure it out later
 require('events').setMaxListeners(100)
 
@@ -21,6 +22,10 @@ async function downloadAsMP3(videoId, title) {
         return;
     }
 
+    if (Object.values(exceptions).indexOf(videoId) > -1) {
+        console.log(`Skipping ${title}, it\'s on the exclude list.`);
+    }
+
     return new Promise((resolve, reject) => {
         const YoutubeMp3Downloader = require("youtube-mp3-downloader");
 
@@ -32,12 +37,14 @@ async function downloadAsMP3(videoId, title) {
         YD.download(videoId, `${title}.${videoId}`);
 
         YD.on('progress', (downloadProgress) => {
-            progress.update(downloadProgress.progress.percentage);
+            progress.update(Math.round(downloadProgress.progress.percentage) ||
+                downloadProgress.progress.percentage);
         });
 
         YD.on('error', (error) => {
-            console.log(error);
-            //return reject('Something went wrong during the download process.')
+            // return reject('Something went wrong during the download process.')
+            // Let's skip it for now
+            return resolve(true);
         });
 
         YD.on('finished', (err, data) => {
