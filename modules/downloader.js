@@ -3,6 +3,8 @@ const cliProgress = require('cli-progress');
 const fs = require('fs');
 const path = require('path');
 const directoryPath = path.join(__dirname, '../music');
+const translit = require('ua-en-translit');
+
 let songsList = [];
 fs.readdir(directoryPath, function (err, files) {
     songsList = files;
@@ -12,18 +14,20 @@ const exceptions = require('../exeptions.json');
 require('events').setMaxListeners(100)
 
 async function downloadAsMP3(videoId, title) {
+    const songTitle = translit(title);
+
     const exist = songsList.find(
-        i => i.includes(title) ||
+        i => i.includes(songTitle) ||
             i.split('.')[1].includes(videoId)
     );
 
     if (exist) {
-        console.log(`Skipping ${title}, already exist.`);
+        console.log(`Skipping ${songTitle}, already exist.`);
         return;
     }
 
     if (Object.values(exceptions).indexOf(videoId) > -1) {
-        console.log(`Skipping ${title}, it\'s on the exclude list.`);
+        console.log(`Skipping ${songTitle}, it\'s on the exclude list.`);
     }
 
     return new Promise((resolve, reject) => {
@@ -31,10 +35,10 @@ async function downloadAsMP3(videoId, title) {
 
         const YD = new YoutubeMp3Downloader(config.downloaderOptions);
         const progress = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic);
-        console.log(`\n Downloading -> ${title}(${videoId})`);
+        console.log(`\n Downloading -> ${songTitle}(${videoId})`);
         progress.start(100, 0);
 
-        YD.download(videoId, `${title}.${videoId}`);
+        YD.download(videoId, `${songTitle}`);
 
         YD.on('progress', (downloadProgress) => {
             progress.update(Math.round(downloadProgress.progress.percentage) ||
